@@ -1,4 +1,4 @@
-package de.kcodeyt.utils;
+package de.gobrother.utils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

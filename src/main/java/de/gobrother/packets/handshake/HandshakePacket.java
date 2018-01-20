@@ -1,6 +1,6 @@
-package de.kcodeyt.packets.handshake;
+package de.gobrother.packets.handshake;
 
-import de.kcodeyt.packets.Packet;
+import de.gobrother.packets.Packet;
 
 public class HandshakePacket extends Packet {
 

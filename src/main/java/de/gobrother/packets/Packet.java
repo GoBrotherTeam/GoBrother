@@ -1,4 +1,4 @@
-package de.kcodeyt.packets;
+package de.gobrother.packets;
 
 import java.io.*;
 import java.lang.annotation.ElementType;

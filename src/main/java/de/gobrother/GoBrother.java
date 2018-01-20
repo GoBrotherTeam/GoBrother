@@ -1,22 +1,17 @@
-package de.kcodeyt;
+package de.gobrother;
 
-import com.google.gson.Gson;
-import de.kcodeyt.packets.Packet;
-import de.kcodeyt.packets.Packet.*;
-import de.kcodeyt.packets.Protocols;
-import de.kcodeyt.packets.handshake.HandshakePacket;
-import de.kcodeyt.utils.Binary;
+import de.gobrother.packets.Packet;
+import de.gobrother.packets.Packet.*;
+import de.gobrother.packets.Protocols;
+import de.gobrother.packets.handshake.HandshakePacket;
+import de.gobrother.utils.Binary;
 import io.gomint.plugin.Plugin;
 import io.gomint.plugin.PluginName;
 import io.gomint.plugin.Version;
 
-import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @PluginName("GoBrother")
 @Version(major = 1, minor = 0)

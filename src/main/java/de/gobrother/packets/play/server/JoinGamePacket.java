@@ -1,6 +1,6 @@
-package de.kcodeyt.packets.play.server;
+package de.gobrother.packets.play.server;
 
-import de.kcodeyt.packets.Packet;
+import de.gobrother.packets.Packet;
 
 public class JoinGamePacket extends Packet {
 
