@@ -17,7 +17,8 @@ import java.net.Socket;
 @Version(major = 1, minor = 0)
 public class GoBrother extends Plugin {
 
-    public static void main(String... args) {
+    @Override
+    public void onInstall() {
         ServerSocket socket = null;
         try {
             socket = new ServerSocket(25565);
@@ -37,7 +38,7 @@ public class GoBrother extends Plugin {
                     if(((HandshakePacket) packet).nextState == 1) {
                         ByteArrayOutputStream tmp = new ByteArrayOutputStream();
                         new DataOutputStream(tmp).writeByte(0x00);
-                        String desc = "{\"description\":{\"text\":\"AMK\"},\"players\":{\"max\":20,\"online\":1,\"sample\":[]},\"version\":{\"name\":\"1.12.2\",\"protocol\":340}}";
+                        String desc = "{\"description\":{\"text\":\"" + getServer().getMotd() + "\"},\"players\":{\"max\":" + getServer().getMaxPlayers() + ",\"online\":" + getServer().getPlayers().size() + ",\"sample\":[]},\"version\":{\"name\":\"1.12.2\",\"protocol\":340}}";
                         Binary.writeVarInt(new DataOutputStream(tmp), desc.length());
                         new DataOutputStream(tmp).writeBytes(desc);
 
