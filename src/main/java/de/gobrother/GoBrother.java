@@ -3,7 +3,7 @@ package de.gobrother;
 import de.gobrother.packets.Packet;
 import de.gobrother.packets.Packet.*;
 import de.gobrother.packets.Protocols;
-import de.gobrother.packets.handshake.HandshakePacket;
+import de.gobrother.packets.client.HandshakePacket;
 import de.gobrother.utils.Binary;
 import io.gomint.plugin.Plugin;
 import io.gomint.plugin.PluginName;

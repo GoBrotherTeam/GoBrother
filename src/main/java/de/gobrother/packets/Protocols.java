@@ -1,6 +1,6 @@
 package de.gobrother.packets;
 
-import de.gobrother.packets.handshake.HandshakePacket;
+import de.gobrother.packets.client.HandshakePacket;
 
 public class Protocols {
 

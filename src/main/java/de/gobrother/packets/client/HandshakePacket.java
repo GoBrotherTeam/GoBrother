@@ -1,4 +1,4 @@
-package de.gobrother.packets.handshake;
+package de.gobrother.packets.client;
 
 import de.gobrother.packets.Packet;
 

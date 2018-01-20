@@ -1,4 +1,4 @@
-package de.gobrother.packets.status.server;
+package de.gobrother.packets.server;
 
 import de.gobrother.packets.Packet;
 

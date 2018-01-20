@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: io.gomint:gomint-api:1.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/gomint/gomint-api/1.0.0-SNAPSHOT/gomint-api-1.0.0-20180120.225312-5.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/io/gomint/gomint-api/1.0.0-SNAPSHOT/gomint-api-1.0.0-20180120.225312-5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/io/gomint/gomint-api/1.0.0-SNAPSHOT/gomint-api-1.0.0-20180120.225312-5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
