@@ -5,6 +5,7 @@ import de.gobrother.packets.Packet;
 import de.gobrother.packets.Packet.*;
 import de.gobrother.packets.Protocols;
 import de.gobrother.packets.client.HandshakePacket;
+import de.gobrother.packets.client.PongPacket;
 import de.gobrother.utils.Binary;
 import io.gomint.plugin.Plugin;
 import io.gomint.plugin.PluginName;
@@ -46,13 +47,13 @@ public class GoBrother extends Plugin {
                     socket = new ServerSocket(config.getPort());
 
                     while(true) {
-                        try{
+                        try {
                             Socket socket1 = socket.accept();
 
                             McInputStream input = new McInputStream(socket1.getInputStream());
                             McOutputStream output = new McOutputStream(socket1.getOutputStream());
 
-                            Protocol protocol = Protocols.HandshakeProtocol();
+                            Protocol protocol = Protocols.handshakeProtocol();
                             Packet packet = input.readPacket(protocol);
 
                             if(((HandshakePacket) packet).nextState == 1) {
