@@ -1,15 +1,53 @@
 package de.gobrother.network.packet;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.crypto.SecretKey;
 import java.io.*;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
+import java.security.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 public abstract class Packet {
+
+    public static PrivateKey RSAPrivateKey;
+    public static PublicKey RSAPublicKey;
+
+    static {
+        try {
+            KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA");
+            gen.initialize(1024);
+            KeyPair pair = gen.generateKeyPair();
+            RSAPrivateKey = pair.getPrivate();
+            RSAPublicKey = pair.getPublic();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    public static String getServerIdHash(String serverId, SecretKey secretKey) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            md.update(serverId.getBytes());
+            md.update(secretKey.getEncoded());
+            md.update(RSAPublicKey.getEncoded());
+
+            return new BigInteger(md.digest()).toString(16);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @ReaderMethod
     private boolean readBoolean(McInputStream input) throws IOException {
@@ -104,6 +142,19 @@ public abstract class Packet {
         output.writeLong(value);
     }
 
+    @ReaderMethod
+    private byte[] readByteArray(McInputStream input) throws IOException {
+        byte[] ret = new byte[input.readVarInt()];
+        input.readFully(ret);
+        return ret;
+    }
+
+    @WriterMethod
+    private void writeByteArray(McOutputStream output, byte[] value) throws IOException {
+        output.writeVarInt(value.length);
+        output.write(value);
+    }
+
     @ReaderMethod(Field.Type.FixedPoint)
     private float readFixedPoint(McInputStream input) throws IOException {
         return ((float) input.readInt()) / 32;
@@ -163,6 +214,7 @@ public abstract class Packet {
     public @interface Field {
 
         int value();
+
         Type type() default Type.Auto;
 
         enum Type {
@@ -181,6 +233,9 @@ public abstract class Packet {
 
         private HashMap<Integer, Class<? extends Packet>> ClientPackets = new HashMap<>();
         private HashMap<Integer, Class<? extends Packet>> ServerPackets = new HashMap<>();
+        @Getter
+        @Setter
+        private int compressionTreshold = -1;
 
         public Protocol registerClientPacket(int id, Class<? extends Packet> clazz) {
             ClientPackets.put(id, clazz);
@@ -197,7 +252,7 @@ public abstract class Packet {
                 return ClientPackets.get(Integer.valueOf(id)).newInstance();
             } catch (NullPointerException e) {
                 throw new RuntimeException("Unknown packet (" + id + ")");
-            }catch (Exception e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
@@ -221,7 +276,28 @@ public abstract class Packet {
         public Packet readPacket(Protocol protocol) throws IOException {
             byte[] data = new byte[readVarInt()];
             readFully(data);
+
             McInputStream input = new McInputStream(new ByteArrayInputStream(data));
+            if (protocol.getCompressionTreshold() > 0) {
+                int uncompressedlen = input.readVarInt();
+                if (uncompressedlen != 0) {
+                    byte[] d = new byte[uncompressedlen];
+                    int len = input.read(d);
+
+                    Inflater inflater = new Inflater();
+                    inflater.setInput(d, 0, len);
+                    byte[] result = new byte[uncompressedlen];
+                    try {
+                        inflater.inflate(result);
+                    } catch (Throwable t) {
+                        throw new RuntimeException("Invalid compression");
+                    }finally {
+                        inflater.end();
+                    }
+                    input = new McInputStream(new ByteArrayInputStream(result));
+                }
+            }
+
             int id = input.readUnsignedByte();
 
             Packet packet = protocol.getPacketById(id);
@@ -264,6 +340,27 @@ public abstract class Packet {
             output.write(protocol.getIdByPacket(packet));
             packet.write(new McOutputStream(output));
 
+            if (protocol.getCompressionTreshold() > 0) {
+                ByteArrayOutputStream data = new ByteArrayOutputStream();
+                McOutputStream tmp = new McOutputStream(data);
+
+                if (output.size() > protocol.getCompressionTreshold()) {
+                    byte[] result = new byte[output.size()];
+                    Deflater deflater = new Deflater();
+                    deflater.setInput(data.toByteArray());
+                    deflater.finish();
+                    int len = deflater.deflate(result);
+                    tmp.writeVarInt(len);
+                    tmp.write(result, 0, len);
+                } else {
+                    tmp.writeVarInt(0);
+                    tmp.write(output.toByteArray());
+                }
+
+                output = new ByteArrayOutputStream();
+                output.write(data.toByteArray());
+            }
+
             writeVarInt(output.size());
             write(output.toByteArray());
             flush();
@@ -271,7 +368,7 @@ public abstract class Packet {
 
         public void writeVarInt(int value) throws IOException {
             do {
-                byte temp = (byte)(value & 0b01111111);
+                byte temp = (byte) (value & 0b01111111);
                 value >>>= 7;
                 if (value != 0) {
                     temp |= 0b10000000;

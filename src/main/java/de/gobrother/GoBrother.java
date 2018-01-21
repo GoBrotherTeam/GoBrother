@@ -2,7 +2,6 @@ package de.gobrother;
 
 import de.gobrother.config.Config;
 import de.gobrother.network.Server;
-import de.gobrother.player.JavaPlayer;
 import io.gomint.plugin.Plugin;
 import io.gomint.plugin.PluginName;
 import io.gomint.plugin.Version;
@@ -18,9 +17,6 @@ public class GoBrother extends Plugin {
 
     private Config config;
     private Server goBrotherServer;
-
-    @Getter
-    private ArrayList<JavaPlayer> javaPlayers;
 
     public final static String MCPC_VERSION = "1.12.2";
     public final static int MCPC_PROTOCOL   = 340;
@@ -43,8 +39,6 @@ public class GoBrother extends Plugin {
 
         this.goBrotherServer = new Server(this, config.getPort());
         this.goBrotherServer.start();
-
-        this.javaPlayers = new ArrayList<>();
     }
 
     @Override

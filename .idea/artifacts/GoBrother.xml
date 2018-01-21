@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="GoBrother">
+    <output-path>$PROJECT_DIR$/../../Server/Tests/plugins</output-path>
+    <root id="archive" name="GoBrother.jar">
+      <element id="library" level="project" name="Maven: org.json:json:20171018" />
+      <element id="module-output" name="GoBrother" />
+    </root>
+  </artifact>
+</component>
