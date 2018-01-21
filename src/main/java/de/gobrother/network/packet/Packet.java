@@ -69,6 +69,11 @@ public abstract class Packet {
         return input.readUnsignedByte();
     }
 
+    @WriterMethod(Field.Type.UnsignedByte)
+    private void writeUnsignedByte(McOutputStream output, int value) throws IOException {
+        output.writeByte((byte) (value & 0xFF));
+    }
+
     @ReaderMethod(Field.Type.UnsignedShort)
     private int readUnsignedShort(McInputStream input) throws IOException {
         return input.readUnsignedShort();
@@ -105,6 +110,11 @@ public abstract class Packet {
     @ReaderMethod
     private int readInt(McInputStream input) throws IOException {
         return input.readInt();
+    }
+
+    @WriterMethod
+    private void writeInt(McOutputStream output, int value) throws IOException {
+        output.writeInt(value);
     }
 
     @ReaderMethod

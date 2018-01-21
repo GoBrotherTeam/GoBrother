@@ -5,13 +5,13 @@ import de.gobrother.network.packet.Packet;
 public class JoinGamePacket extends Packet {
 
     @Field(0)
-    public int entityId;
+    public int eid;
 
     @Field(value = 1, type = Field.Type.UnsignedByte)
     public int gamemode;
 
     @Field(2)
-    public byte dimension;
+    public int dimension;
 
     @Field(value = 3, type = Field.Type.UnsignedByte)
     public int difficulty;

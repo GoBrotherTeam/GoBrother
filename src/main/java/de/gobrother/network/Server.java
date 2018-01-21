@@ -6,7 +6,6 @@ import de.gobrother.network.packet.Protocols;
 import de.gobrother.network.packet.handshaking.HandshakePacket;
 import de.gobrother.network.packet.login.client.EncryptionResponsePacket;
 import de.gobrother.network.packet.login.client.LoginStartPacket;
-import de.gobrother.network.packet.login.server.DisconnectPacket;
 import de.gobrother.network.packet.login.server.EncryptionRequestPacket;
 import de.gobrother.network.packet.login.server.LoginSuccessPacket;
 import de.gobrother.network.packet.login.server.SetCompressionPacket;
@@ -15,8 +14,6 @@ import de.gobrother.network.packet.status.client.PingPacket;
 import de.gobrother.network.packet.status.client.RequestPacket;
 import de.gobrother.network.packet.status.server.PongPacket;
 import de.gobrother.network.packet.status.server.ResponsePacket;
-import io.gomint.GoMint;
-import io.gomint.entity.EntityPlayer;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONObject;
@@ -27,7 +24,9 @@ import javax.crypto.CipherOutputStream;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.*;
 import java.util.Arrays;
 import java.util.Random;
@@ -176,6 +175,7 @@ public class Server {
                             socket.close();
                             return;
                         }
+
                         connection.disconnect();
 
                         Cipher readCipher = Cipher.getInstance("AES/CFB8/NoPadding");
@@ -207,6 +207,17 @@ public class Server {
             }
 
             try {
+
+                JoinGamePacket joinGamePacket = new JoinGamePacket();
+                joinGamePacket.reducedDebugInfo = false;
+                joinGamePacket.maxPlayers = 20;
+                joinGamePacket.gamemode = 1;
+                joinGamePacket.levelType = "flat";
+                joinGamePacket.dimension = 0;
+                joinGamePacket.difficulty = 0;
+                joinGamePacket.eid = 1;
+
+                output.writePacket(joinGamePacket, protocol);
 
                 while (!socket.isClosed()) {
                     packet = input.readPacket(protocol);
