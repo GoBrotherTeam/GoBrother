@@ -1,6 +1,6 @@
-package de.gobrother.packets.client;
+package de.gobrother.network.packet.client;
 
-import de.gobrother.packets.Packet;
+import de.gobrother.network.packet.Packet;
 
 public class HandshakePacket extends Packet {
 

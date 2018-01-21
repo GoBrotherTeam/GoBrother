@@ -1,4 +1,4 @@
-package de.gobrother.packets;
+package de.gobrother.network.packet;
 
 import java.io.*;
 import java.lang.annotation.ElementType;
@@ -92,6 +92,16 @@ public abstract class Packet {
     @WriterMethod
     private void writeFloat(McOutputStream output, float value) throws IOException {
         output.writeFloat(value);
+    }
+
+    @ReaderMethod
+    private long readLong(McInputStream input) throws IOException {
+        return input.readLong();
+    }
+
+    @WriterMethod
+    private void writeLong(McOutputStream output, long value) throws IOException {
+        output.writeLong(value);
     }
 
     @ReaderMethod(Field.Type.FixedPoint)

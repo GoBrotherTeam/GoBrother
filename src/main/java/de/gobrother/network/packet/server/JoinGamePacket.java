@@ -1,6 +1,6 @@
-package de.gobrother.packets.server;
+package de.gobrother.network.packet.server;
 
-import de.gobrother.packets.Packet;
+import de.gobrother.network.packet.Packet;
 
 public class JoinGamePacket extends Packet {
 

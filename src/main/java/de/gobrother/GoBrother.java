@@ -1,26 +1,29 @@
 package de.gobrother;
 
 import de.gobrother.config.Config;
-import de.gobrother.packets.Packet;
-import de.gobrother.packets.Packet.*;
-import de.gobrother.packets.Protocols;
-import de.gobrother.packets.client.HandshakePacket;
-import de.gobrother.packets.client.PongPacket;
-import de.gobrother.utils.Binary;
+import de.gobrother.network.Server;
+import de.gobrother.player.JavaPlayer;
 import io.gomint.plugin.Plugin;
 import io.gomint.plugin.PluginName;
 import io.gomint.plugin.Version;
+import lombok.Getter;
 
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 @PluginName("GoBrother")
 @Version(major = 1, minor = 0)
 public class GoBrother extends Plugin {
 
     private Config config;
-    private Thread serverThread;
+    private Server goBrotherServer;
+
+    @Getter
+    private ArrayList<JavaPlayer> javaPlayers;
+
+    public final static String MCPC_VERSION = "1.12.2";
+    public final static int MCPC_PROTOCOL   = 340;
 
     @Override
     public void onInstall() {
@@ -38,56 +41,15 @@ public class GoBrother extends Plugin {
             e.printStackTrace();
         }
 
-        this.serverThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ServerSocket socket = null;
-                try {
-                    getLogger().info("Starte GoBrother Server auf dem Port " + config.getPort());
-                    socket = new ServerSocket(config.getPort());
+        this.goBrotherServer = new Server(this, config.getPort());
+        this.goBrotherServer.start();
 
-                    while(true) {
-                        try {
-                            Socket socket1 = socket.accept();
+        this.javaPlayers = new ArrayList<>();
+    }
 
-                            McInputStream input = new McInputStream(socket1.getInputStream());
-                            McOutputStream output = new McOutputStream(socket1.getOutputStream());
-
-                            Protocol protocol = Protocols.handshakeProtocol();
-                            Packet packet = input.readPacket(protocol);
-
-                            if(((HandshakePacket) packet).nextState == 1) {
-                                ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-                                new DataOutputStream(tmp).writeByte(0x00);
-                                String desc = "{\"description\":{\"text\":\"" + getServer().getMotd() + "\"},\"players\":{\"max\":" + getServer().getMaxPlayers() + ",\"online\":" + getServer().getPlayers().size() + ",\"sample\":[]},\"version\":{\"name\":\"1.12.2\",\"protocol\":340}}";
-                                Binary.writeVarInt(new DataOutputStream(tmp), desc.length());
-                                new DataOutputStream(tmp).writeBytes(desc);
-
-                                Binary.writeVarInt(output, tmp.size());
-                                output.write(tmp.toByteArray());
-                            } else {
-
-                            }
-
-                        } catch (IOException ex){
-                            ex.printStackTrace();
-                        }
-                    }
-
-                } catch (IOException e) {
-                    getLogger().warn("Konnte GoBrother Server nicht auf dem Port " + config.getPort() + " binden");
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        socket.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-
-        this.serverThread.start();
+    @Override
+    public void onUninstall() {
+        this.goBrotherServer.stop();
     }
 
 }
