@@ -222,20 +222,6 @@ public class Server {
 
                 output.writePacket(joinGamePacket, protocol);
 
-                SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
-                spawnPositionPacket.x = (int) GoMint.instance().getDefaultWorld().getSpawnLocation().getX();
-                spawnPositionPacket.y = (int) GoMint.instance().getDefaultWorld().getSpawnLocation().getY();
-                spawnPositionPacket.z = (int) GoMint.instance().getDefaultWorld().getSpawnLocation().getZ();
-
-                output.writePacket( spawnPositionPacket, protocol );
-
-                PlayerAbilitiesPacket playerAbilitiesPacket = new PlayerAbilitiesPacket();
-                playerAbilitiesPacket.flags = 0;
-                playerAbilitiesPacket.flySpeed = (float) 0.05;
-                playerAbilitiesPacket.walingSpeed = (float) 0.1;
-
-                output.writePacket( playerAbilitiesPacket, protocol );
-
                 while (!socket.isClosed()) {
                     packet = input.readPacket(protocol);
 
