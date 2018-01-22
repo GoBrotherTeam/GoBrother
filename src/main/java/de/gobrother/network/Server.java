@@ -10,10 +10,13 @@ import de.gobrother.network.packet.login.server.EncryptionRequestPacket;
 import de.gobrother.network.packet.login.server.LoginSuccessPacket;
 import de.gobrother.network.packet.login.server.SetCompressionPacket;
 import de.gobrother.network.packet.play.server.JoinGamePacket;
+import de.gobrother.network.packet.play.server.PlayerAbilitiesPacket;
+import de.gobrother.network.packet.play.server.SpawnPositionPacket;
 import de.gobrother.network.packet.status.client.PingPacket;
 import de.gobrother.network.packet.status.client.RequestPacket;
 import de.gobrother.network.packet.status.server.PongPacket;
 import de.gobrother.network.packet.status.server.ResponsePacket;
+import io.gomint.GoMint;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONObject;
@@ -218,6 +221,20 @@ public class Server {
                 joinGamePacket.eid = 1;
 
                 output.writePacket(joinGamePacket, protocol);
+
+                SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
+                spawnPositionPacket.x = (int) GoMint.instance().getDefaultWorld().getSpawnLocation().getX();
+                spawnPositionPacket.y = (int) GoMint.instance().getDefaultWorld().getSpawnLocation().getY();
+                spawnPositionPacket.z = (int) GoMint.instance().getDefaultWorld().getSpawnLocation().getZ();
+
+                output.writePacket( spawnPositionPacket, protocol );
+
+                PlayerAbilitiesPacket playerAbilitiesPacket = new PlayerAbilitiesPacket();
+                playerAbilitiesPacket.flags = 0;
+                playerAbilitiesPacket.flySpeed = (float) 0.05;
+                playerAbilitiesPacket.walingSpeed = (float) 0.1;
+
+                output.writePacket( playerAbilitiesPacket, protocol );
 
                 while (!socket.isClosed()) {
                     packet = input.readPacket(protocol);
