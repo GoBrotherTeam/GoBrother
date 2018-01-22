@@ -38,7 +38,9 @@ public class Protocols {
     }
 
     public static Packet.Protocol playProtocol() {
-        return new Packet.Protocol().registerServerPacket(0, JoinGamePacket.class).registerServerPacket( 1, SpawnPositionPacket.class ).registerServerPacket( 2, PlayerAbilitiesPacket.class );
+        return new Packet.Protocol().registerServerPacket(0x23, JoinGamePacket.class).
+                registerServerPacket( 0x46, SpawnPositionPacket.class ).
+                registerServerPacket( 0x13, PlayerAbilitiesPacket.class );
     }
 
 }
