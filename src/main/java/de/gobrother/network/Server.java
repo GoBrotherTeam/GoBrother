@@ -210,9 +210,9 @@ public class Server {
 
                 JoinGamePacket joinGamePacket = new JoinGamePacket();
                 joinGamePacket.reducedDebugInfo = false;
-                joinGamePacket.maxPlayers = 20;
+                joinGamePacket.maxPlayers = plugin.getServer().getMaxPlayers();
                 joinGamePacket.gamemode = 1;
-                joinGamePacket.levelType = "flat";
+                joinGamePacket.levelType = "default";
                 joinGamePacket.dimension = 0;
                 joinGamePacket.difficulty = 0;
                 joinGamePacket.eid = 1;
