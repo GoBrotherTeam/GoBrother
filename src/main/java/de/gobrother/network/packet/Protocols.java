@@ -8,6 +8,8 @@ import de.gobrother.network.packet.login.server.EncryptionRequestPacket;
 import de.gobrother.network.packet.login.server.LoginSuccessPacket;
 import de.gobrother.network.packet.login.server.SetCompressionPacket;
 import de.gobrother.network.packet.play.server.JoinGamePacket;
+import de.gobrother.network.packet.play.server.PlayerAbilitiesPacket;
+import de.gobrother.network.packet.play.server.SpawnPositionPacket;
 import de.gobrother.network.packet.status.client.PingPacket;
 import de.gobrother.network.packet.status.client.RequestPacket;
 import de.gobrother.network.packet.status.server.PongPacket;
@@ -36,7 +38,7 @@ public class Protocols {
     }
 
     public static Packet.Protocol playProtocol() {
-        return new Packet.Protocol().registerServerPacket(0, JoinGamePacket.class);
+        return new Packet.Protocol().registerServerPacket(0, JoinGamePacket.class).registerServerPacket( 1, SpawnPositionPacket.class ).registerServerPacket( 2, PlayerAbilitiesPacket.class );
     }
 
 }
