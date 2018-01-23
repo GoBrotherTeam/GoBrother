@@ -40,7 +40,9 @@ public class Protocols {
     public static Packet.Protocol playProtocol() {
         return new Packet.Protocol().registerServerPacket(0x23, JoinGamePacket.class).
                 registerServerPacket( 0x46, SpawnPositionPacket.class ).
-                registerServerPacket( 0x13, PlayerAbilitiesPacket.class );
+                registerServerPacket( 0x13, PlayerAbilitiesPacket.class ).
+                registerServerPacket(0x1F, de.gobrother.network.packet.play.server.KeepAlivePacket.class).
+                registerClientPacket(0x0B, de.gobrother.network.packet.play.client.KeepAlivePacket.class);
     }
 
 }

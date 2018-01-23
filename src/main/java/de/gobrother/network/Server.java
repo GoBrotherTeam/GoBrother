@@ -9,6 +9,7 @@ import de.gobrother.network.packet.login.client.LoginStartPacket;
 import de.gobrother.network.packet.login.server.EncryptionRequestPacket;
 import de.gobrother.network.packet.login.server.LoginSuccessPacket;
 import de.gobrother.network.packet.login.server.SetCompressionPacket;
+import de.gobrother.network.packet.play.client.KeepAlivePacket;
 import de.gobrother.network.packet.play.server.JoinGamePacket;
 import de.gobrother.network.packet.play.server.PlayerAbilitiesPacket;
 import de.gobrother.network.packet.play.server.SpawnPositionPacket;
@@ -223,11 +224,22 @@ public class Server {
                 output.writePacket(joinGamePacket, protocol);
 
                 while (!socket.isClosed()) {
+                    de.gobrother.network.packet.play.server.KeepAlivePacket keepAlivePacket = new de.gobrother.network.packet.play.server.KeepAlivePacket();
+                    keepAlivePacket.keepAliveId = System.currentTimeMillis();
+
+                    output.writePacket(keepAlivePacket, protocol);
+
                     packet = input.readPacket(protocol);
+
+                    if(packet instanceof KeepAlivePacket) {
+                        System.out.println("Er hat geantwortet lol roflkopta");
+                    }
 
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+                socket.close();
+                return;
             }
         }
 
