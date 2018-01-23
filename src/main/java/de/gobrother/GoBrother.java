@@ -5,11 +5,9 @@ import de.gobrother.network.Server;
 import io.gomint.plugin.Plugin;
 import io.gomint.plugin.PluginName;
 import io.gomint.plugin.Version;
-import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 @PluginName("GoBrother")
 @Version(major = 1, minor = 0)

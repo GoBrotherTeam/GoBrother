@@ -170,6 +170,16 @@ public abstract class Packet {
         return ((float) input.readInt()) / 32;
     }
 
+    @WriterMethod(Field.Type.Position)
+    private void writePosition(McOutputStream output, int x, int y, int z) throws IOException {
+        output.writeLong( ((x & 0x3FFFFFF) << 38) | ((y & 0xFFF) << 26) | (z & 0x3FFFFFF) );
+    }
+
+    @ReaderMethod(Field.Type.Position)
+    private long readPosition(McInputStream input) throws IOException {
+        return input.readLong();
+    }
+
     public void read(McInputStream input) throws IOException {
         Arrays.stream(this.getClass().getDeclaredFields()).filter((f) -> f.isAnnotationPresent(Field.class)).sorted(Comparator.comparing((f) -> f.getAnnotation(Field.class).value())).forEachOrdered((f) -> {
             try {
@@ -235,7 +245,8 @@ public abstract class Packet {
             UnsignedShort,
             Int,
             VarInt,
-            FixedPoint
+            FixedPoint,
+            Position
         }
     }
 

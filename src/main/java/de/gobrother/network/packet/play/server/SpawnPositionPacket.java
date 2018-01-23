@@ -5,6 +5,6 @@ import de.gobrother.network.packet.Packet;
 public class SpawnPositionPacket extends Packet {
 
     @Field(0)
-    public long position;
+    public int x, y ,z;
 
 }
