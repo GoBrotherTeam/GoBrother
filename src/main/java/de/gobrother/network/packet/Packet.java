@@ -172,12 +172,18 @@ public abstract class Packet {
 
     @WriterMethod(Field.Type.Position)
     private void writePosition(McOutputStream output, int x, int y, int z) throws IOException {
-        output.writeLong( ((x & 0x3FFFFFF) << 38) | ((y & 0xFFF) << 26) | (z & 0x3FFFFFF) );
+        output.writeLong( ((x & 0x3FFFFFF) << 38) | ((y & 0xFFF) << 26) | (z & 0x3FFFFFF));
     }
 
     @ReaderMethod(Field.Type.Position)
     private long readPosition(McInputStream input) throws IOException {
-        return input.readLong();
+        long val = input.readLong();
+
+        int x = (int) (val >> 38);
+        int y = (int) ((val >> 26) & 0xFFF);
+        int z = (int) (val << 38 >> 38);
+
+        return x | y | z;
     }
 
     public void read(McInputStream input) throws IOException {

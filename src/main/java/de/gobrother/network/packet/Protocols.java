@@ -8,10 +8,12 @@ import de.gobrother.network.packet.login.server.EncryptionRequestPacket;
 import de.gobrother.network.packet.login.server.LoginSuccessPacket;
 import de.gobrother.network.packet.login.server.SetCompressionPacket;
 import de.gobrother.network.packet.play.client.*;
-import de.gobrother.network.packet.play.server.EnchantItemPacket;
-import de.gobrother.network.packet.play.server.JoinGamePacket;
-import de.gobrother.network.packet.play.server.PlayerAbilitiesPacket;
-import de.gobrother.network.packet.play.server.SpawnPositionPacket;
+import de.gobrother.network.packet.play.client.AnimatePacket;
+import de.gobrother.network.packet.play.client.ChatPacket;
+import de.gobrother.network.packet.play.client.CloseWindowPacket;
+import de.gobrother.network.packet.play.client.ConfirmTransactionPacket;
+import de.gobrother.network.packet.play.client.KeepAlivePacket;
+import de.gobrother.network.packet.play.server.*;
 import de.gobrother.network.packet.status.client.PingPacket;
 import de.gobrother.network.packet.status.client.RequestPacket;
 import de.gobrother.network.packet.status.server.PongPacket;
@@ -48,7 +50,8 @@ public class Protocols {
                 registerClientPacket(0x0B, de.gobrother.network.packet.play.client.KeepAlivePacket.class).
                 registerClientPacket( 0x37, AdvancementTabPacket.class ).
 
-                registerClientPacket( 0x1D, AnimatePacket.class).
+                registerClientPacket( 0x1D, de.gobrother.network.packet.play.client.AnimatePacket.class).
+                registerServerPacket( 0x06, de.gobrother.network.packet.play.server.AnimatePacket.class ).
 
                 registerServerPacket( 0x0F, de.gobrother.network.packet.play.server.ChatPacket.class ).
                 registerClientPacket( 0x02, de.gobrother.network.packet.play.client.ChatPacket.class ).
@@ -77,7 +80,11 @@ public class Protocols {
                 registerClientPacket( 0x00, TeleportConfirmPacket.class ).
                 registerClientPacket( 0x1C, UpdateSignPacket.class ).
                 registerClientPacket( 0x0A, UseEntityPacket.class ).
-                registerClientPacket( 0x20, UseItemPacket.class );
+                registerClientPacket( 0x20, UseItemPacket.class ).
+                registerServerPacket( 0x0A, BlockActionPacket.class ).
+                registerServerPacket( 0x08, BlockBreakAnimationPacket.class ).
+                registerServerPacket( 0x0B, BlockChangePacket.class ).
+                registerServerPacket( 0x1E, ChangeGameStatePacket.class );
 
     }
 
