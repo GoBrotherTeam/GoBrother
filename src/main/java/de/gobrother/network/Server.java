@@ -17,7 +17,9 @@ import de.gobrother.network.packet.status.client.PingPacket;
 import de.gobrother.network.packet.status.client.RequestPacket;
 import de.gobrother.network.packet.status.server.PongPacket;
 import de.gobrother.network.packet.status.server.ResponsePacket;
+import de.gobrother.player.JavaPlayer;
 import io.gomint.GoMint;
+import io.gomint.server.network.packet.PacketBlockEvent;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONObject;
@@ -34,6 +36,7 @@ import java.io.InputStreamReader;
 import java.net.*;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.UUID;
 
 public class Server {
 
@@ -223,16 +226,20 @@ public class Server {
 
                 output.writePacket(joinGamePacket, protocol);
 
+                SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
+                spawnPositionPacket.x = (int) plugin.getServer().getDefaultWorld().getSpawnLocation().getX();
+                spawnPositionPacket.y = (int) plugin.getServer().getDefaultWorld().getSpawnLocation().getY();
+                spawnPositionPacket.z = (int) plugin.getServer().getDefaultWorld().getSpawnLocation().getZ();
+
+                output.writePacket(spawnPositionPacket, protocol);
+
                 while (!socket.isClosed()) {
-                    de.gobrother.network.packet.play.server.KeepAlivePacket keepAlivePacket = new de.gobrother.network.packet.play.server.KeepAlivePacket();
-                    keepAlivePacket.keepAliveId = System.currentTimeMillis();
-
-                    output.writePacket(keepAlivePacket, protocol);
-
-                    packet = input.readPacket(protocol);
-
-                    if(packet instanceof KeepAlivePacket) {
-                        System.out.println("Er hat geantwortet lol roflkopta");
+                    try {
+                        packet = input.readPacket(protocol);
+                    } catch (IOException ie) {
+                        throw ie;
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
                     }
 
                 }
