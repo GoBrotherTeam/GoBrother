@@ -9,6 +9,7 @@ import de.gobrother.network.packet.login.client.LoginStartPacket;
 import de.gobrother.network.packet.login.server.EncryptionRequestPacket;
 import de.gobrother.network.packet.login.server.LoginSuccessPacket;
 import de.gobrother.network.packet.login.server.SetCompressionPacket;
+import de.gobrother.network.packet.play.client.ChatPacket;
 import de.gobrother.network.packet.play.server.JoinGamePacket;
 import de.gobrother.network.packet.play.server.KeepAlivePacket;
 import de.gobrother.network.packet.play.server.PlayerAbilitiesPacket;
@@ -203,22 +204,6 @@ public class Server {
                         protocol = Protocols.playProtocol();
                         protocol.setCompressionTreshold(256);
 
-                        Packet.McOutputStream finalOutput = output;
-                        Packet.Protocol finalProtocol = protocol;
-                        plugin.getScheduler().scheduleAsync( new Runnable() {
-                            @Override
-                            public void run() {
-                                KeepAlivePacket keepAlivePacket = new KeepAlivePacket();
-                                keepAlivePacket.keepAliveId = new Random().nextInt();
-
-                                try {
-                                    finalOutput.writePacket( keepAlivePacket, finalProtocol );
-                                } catch ( IOException e ) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, 2, 29 * 20, TimeUnit.MILLISECONDS );
-
                         break;
 
                     }
@@ -227,6 +212,24 @@ public class Server {
                 e.printStackTrace();
                 return;
             }
+
+            Packet.McOutputStream finalOutput = output;
+            Packet.Protocol finalProtocol = protocol;
+            plugin.getScheduler().scheduleAsync( new Runnable() {
+                @Override
+                public void run() {
+                    if(!socket.isClosed()) {
+                        KeepAlivePacket keepAlivePacket = new KeepAlivePacket();
+                        keepAlivePacket.keepAliveId = new Random().nextInt();
+
+                        try {
+                            finalOutput.writePacket( keepAlivePacket, finalProtocol );
+                        } catch ( IOException e ) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }, 1, 29, TimeUnit.SECONDS );
 
             try {
 
@@ -261,6 +264,15 @@ public class Server {
                 while (!socket.isClosed()) {
                     try {
                         packet = input.readPacket(protocol);
+
+                        if(packet instanceof ChatPacket) {
+                            de.gobrother.network.packet.play.server.ChatPacket chatPacket = new de.gobrother.network.packet.play.server.ChatPacket();
+                            chatPacket.message = "{\"text\":\"<" + username + "> " + ((ChatPacket) packet).message + "\"}";
+                            chatPacket.position = 0;
+
+                            output.writePacket(chatPacket, protocol);
+                        }
+
                     } catch (IOException ie) {
                         throw ie;
                     } catch (Exception e1) {
