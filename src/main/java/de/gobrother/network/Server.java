@@ -9,18 +9,14 @@ import de.gobrother.network.packet.login.client.LoginStartPacket;
 import de.gobrother.network.packet.login.server.EncryptionRequestPacket;
 import de.gobrother.network.packet.login.server.LoginSuccessPacket;
 import de.gobrother.network.packet.login.server.SetCompressionPacket;
-import de.gobrother.network.packet.play.client.KeepAlivePacket;
-import de.gobrother.network.packet.play.server.ChunkDataPacket;
 import de.gobrother.network.packet.play.server.JoinGamePacket;
+import de.gobrother.network.packet.play.server.KeepAlivePacket;
 import de.gobrother.network.packet.play.server.PlayerAbilitiesPacket;
 import de.gobrother.network.packet.play.server.SpawnPositionPacket;
 import de.gobrother.network.packet.status.client.PingPacket;
 import de.gobrother.network.packet.status.client.RequestPacket;
 import de.gobrother.network.packet.status.server.PongPacket;
 import de.gobrother.network.packet.status.server.ResponsePacket;
-import de.gobrother.player.JavaPlayer;
-import io.gomint.GoMint;
-import io.gomint.server.network.packet.PacketBlockEvent;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONObject;
@@ -37,7 +33,7 @@ import java.io.InputStreamReader;
 import java.net.*;
 import java.util.Arrays;
 import java.util.Random;
-import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class Server {
 
@@ -206,7 +202,25 @@ public class Server {
                         output.writePacket(loginSuccessPacket, protocol);
                         protocol = Protocols.playProtocol();
                         protocol.setCompressionTreshold(256);
+
+                        Packet.McOutputStream finalOutput = output;
+                        Packet.Protocol finalProtocol = protocol;
+                        plugin.getScheduler().scheduleAsync( new Runnable() {
+                            @Override
+                            public void run() {
+                                KeepAlivePacket keepAlivePacket = new KeepAlivePacket();
+                                keepAlivePacket.keepAliveId = new Random().nextInt();
+
+                                try {
+                                    finalOutput.writePacket( keepAlivePacket, finalProtocol );
+                                } catch ( IOException e ) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }, 2, 9 * 20, TimeUnit.MILLISECONDS );
+
                         break;
+
                     }
                 }
             } catch (Exception e) {
