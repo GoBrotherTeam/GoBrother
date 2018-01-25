@@ -217,7 +217,7 @@ public class Server {
                                     e.printStackTrace();
                                 }
                             }
-                        }, 2, 9 * 20, TimeUnit.MILLISECONDS );
+                        }, 2, 29 * 20, TimeUnit.MILLISECONDS );
 
                         break;
 
