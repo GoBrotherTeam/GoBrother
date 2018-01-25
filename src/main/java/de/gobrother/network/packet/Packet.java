@@ -209,13 +209,13 @@ public abstract class Packet {
 
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
-    protected @interface ReaderMethod {
+    public @interface ReaderMethod {
         Field.Type value() default Field.Type.Auto;
     }
 
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.RUNTIME)
-    protected @interface WriterMethod {
+    public @interface WriterMethod {
         Field.Type value() default Field.Type.Auto;
     }
 
@@ -236,7 +236,8 @@ public abstract class Packet {
             Int,
             VarInt,
             FixedPoint,
-            Position
+            Position,
+            Flags
         }
     }
 

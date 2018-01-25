@@ -14,6 +14,7 @@ import de.gobrother.network.packet.play.client.CloseWindowPacket;
 import de.gobrother.network.packet.play.client.ConfirmTransactionPacket;
 import de.gobrother.network.packet.play.client.KeepAlivePacket;
 import de.gobrother.network.packet.play.server.*;
+import de.gobrother.network.packet.play.server.PlayerAbilitiesPacket;
 import de.gobrother.network.packet.status.client.PingPacket;
 import de.gobrother.network.packet.status.client.RequestPacket;
 import de.gobrother.network.packet.status.server.PongPacket;
@@ -44,7 +45,8 @@ public class Protocols {
     public static Packet.Protocol playProtocol() {
         return new Packet.Protocol().registerServerPacket(0x23, JoinGamePacket.class).
                 registerServerPacket( 0x46, SpawnPositionPacket.class ).
-                registerServerPacket( 0x13, PlayerAbilitiesPacket.class ).
+                registerServerPacket( 0x2C, de.gobrother.network.packet.play.server.PlayerAbilitiesPacket.class ).
+                registerClientPacket( 0x13, de.gobrother.network.packet.play.client.PlayerAbilitiesPacket.class ).
 
                 registerServerPacket(0x1F, de.gobrother.network.packet.play.server.KeepAlivePacket.class).
                 registerClientPacket(0x0B, de.gobrother.network.packet.play.client.KeepAlivePacket.class).
@@ -84,7 +86,8 @@ public class Protocols {
                 registerServerPacket( 0x0A, BlockActionPacket.class ).
                 registerServerPacket( 0x08, BlockBreakAnimationPacket.class ).
                 registerServerPacket( 0x0B, BlockChangePacket.class ).
-                registerServerPacket( 0x1E, ChangeGameStatePacket.class );
+                registerServerPacket( 0x1E, ChangeGameStatePacket.class ).
+                registerServerPacket( 0x20, ChunkDataPacket.class );
 
     }
 

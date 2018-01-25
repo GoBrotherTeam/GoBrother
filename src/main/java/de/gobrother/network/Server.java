@@ -10,6 +10,7 @@ import de.gobrother.network.packet.login.server.EncryptionRequestPacket;
 import de.gobrother.network.packet.login.server.LoginSuccessPacket;
 import de.gobrother.network.packet.login.server.SetCompressionPacket;
 import de.gobrother.network.packet.play.client.KeepAlivePacket;
+import de.gobrother.network.packet.play.server.ChunkDataPacket;
 import de.gobrother.network.packet.play.server.JoinGamePacket;
 import de.gobrother.network.packet.play.server.PlayerAbilitiesPacket;
 import de.gobrother.network.packet.play.server.SpawnPositionPacket;
@@ -226,12 +227,22 @@ public class Server {
 
                 output.writePacket(joinGamePacket, protocol);
 
+                PlayerAbilitiesPacket playerAbilitiesPacket = new PlayerAbilitiesPacket();
+                playerAbilitiesPacket.flySpeed = (float) 0.05;
+                playerAbilitiesPacket.walingSpeed = (float) 0.1;
+                playerAbilitiesPacket.canFly = true;
+                playerAbilitiesPacket.isCreative = true;
+                playerAbilitiesPacket.damageDisabled = true;
+                playerAbilitiesPacket.isFlying = true;
+
+                output.writePacket( playerAbilitiesPacket, protocol );
+
                 SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
                 spawnPositionPacket.x = (int) plugin.getServer().getDefaultWorld().getSpawnLocation().getX();
                 spawnPositionPacket.y = (int) plugin.getServer().getDefaultWorld().getSpawnLocation().getY();
                 spawnPositionPacket.z = (int) plugin.getServer().getDefaultWorld().getSpawnLocation().getZ();
 
-                output.writePacket(spawnPositionPacket, protocol);
+                output.writePacket( spawnPositionPacket, protocol );
 
                 while (!socket.isClosed()) {
                     try {
