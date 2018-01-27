@@ -3,7 +3,7 @@ package de.gobrother.utils;
 public class TextFormat {
 
     public String toJson(String message) {
-        String[] splittedMessages = message.replace("§", "%!COLOR!%").split("%!COL");
+        String[] splittedMessages = message.replace("§", "%!COLOR!%").replace("Â", "").split("%!COL");
         String newMessage = "";
 
         if(splittedMessages.length != 1) {
