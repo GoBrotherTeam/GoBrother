@@ -122,8 +122,8 @@ public class Server {
                         output.writePacket(pongPacket, protocol);
                     } else if (packet instanceof RequestPacket) {
                         ResponsePacket responsePacket = new ResponsePacket();
-                        responsePacket.jsonResponse = "{\"description\":{\"text\":\"" +
-                                plugin.getServer().getMotd() + "\"},\"players\":{\"max\":" +
+                        responsePacket.jsonResponse = "{\"description\":" +
+                                new TextFormat().toJson(plugin.getServer().getMotd()) + ",\"players\":{\"max\":" +
                                 plugin.getServer().getMaxPlayers() + ",\"online\":" +
                                 plugin.getServer().getPlayers().size() + ",\"sample\":[]},\"version\":{\"name\":\"" +
                                 GoBrother.MCPC_VERSION + "\",\"protocol\":" + GoBrother.MCPC_PROTOCOL + "}}";
