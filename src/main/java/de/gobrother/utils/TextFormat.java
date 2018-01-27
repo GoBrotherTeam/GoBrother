@@ -10,7 +10,7 @@ public class TextFormat {
             newMessage += "[";
         }
 
-        String string1 = "";
+        String escape = "";
 
         String color = "white";
         boolean bold = false;
@@ -24,29 +24,28 @@ public class TextFormat {
             String partMessage = partMessage1.replace("OR!%", "§");
 
             if(partMessage.contains("§")) {
-                string1 = colorToString(partMessage.substring(1, 2));
-                if(string1.contains("!")) {
-                    if(string1.contains("bold")) {
-                        bold = true;
-                    } else if(string1.contains("obfuscated")) {
-                        obfuscated = true;
-                    } else if(string1.contains("italic")) {
-                        italic = true;
-                    } else if(string1.contains("underlined")) {
-                        underlined = true;
-                    } else if(string1.contains("strikethrough")) {
-                        strikethrough = true;
-                    } else if(string1.contains("reset")) {
-                        color = "white";
+                escape = colorToString(partMessage.substring(1, 2));
 
-                        bold = false;
-                        obfuscated = false;
-                        italic = false;
-                        underlined = false;
-                        strikethrough = false;
-                    }
+                if(escape.equals("bold")) {
+                    bold = true;
+                } else if(escape.equals("obfuscated")) {
+                    obfuscated = true;
+                } else if(escape.equals("italic")) {
+                    italic = true;
+                } else if(escape.equals("underlined")) {
+                    underlined = true;
+                } else if(escape.equals("strikethrough")) {
+                    strikethrough = true;
+                } else if(escape.equals("reset")) {
+                    color = "white";
+
+                    bold = false;
+                    obfuscated = false;
+                    italic = false;
+                    underlined = false;
+                    strikethrough = false;
                 } else {
-                    color = string1;
+                    color = escape;
                 }
             }
             if(partMessage.contains("§")) {
@@ -120,20 +119,18 @@ public class TextFormat {
             return "yellow";
         } else if(colorCode.equals("f")) {
             return "white";
-        }
-
-        else if(colorCode.equals("k")) {
-            return "!obfuscated";
+        } else if(colorCode.equals("k")) {
+            return "obfuscated";
         } else if(colorCode.equals("l")) {
-            return "!bold";
+            return "bold";
         } else if(colorCode.equals("m")) {
-            return "!strikethrough";
+            return "strikethrough";
         } else if(colorCode.equals("n")) {
-            return "!underlined";
+            return "underlined";
         } else if(colorCode.equals("o")) {
-            return "!italic";
+            return "italic";
         } else if(colorCode.equals("r")) {
-            return "!reset";
+            return "reset";
         }
 
         return "not_found";
