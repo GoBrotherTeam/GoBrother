@@ -3,6 +3,11 @@ package de.gobrother;
 import de.gobrother.config.Config;
 import de.gobrother.network.Server;
 import de.gobrother.player.JavaPlayer;
+import io.gomint.GoMint;
+import io.gomint.entity.EntityPlayer;
+import io.gomint.event.EventHandler;
+import io.gomint.event.EventListener;
+import io.gomint.event.player.PlayerMoveEvent;
 import io.gomint.plugin.Plugin;
 import io.gomint.plugin.PluginName;
 import io.gomint.plugin.Version;
@@ -43,6 +48,7 @@ public class GoBrother extends Plugin {
 
         this.goBrotherServer = new Server(this, config.getPort());
         this.goBrotherServer.start();
+        
     }
 
     @Override

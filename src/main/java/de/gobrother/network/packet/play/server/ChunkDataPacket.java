@@ -17,6 +17,6 @@ public class ChunkDataPacket extends Packet {
     public int primaryBitMask;
 
     @Field( 4 )
-    public String playload;
+    public byte[] data;
 
 }
