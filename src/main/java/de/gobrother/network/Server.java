@@ -275,8 +275,8 @@ public class Server {
                             output.writePacket(chatPacket, protocol);
                         }
 
-                    } catch (IOException ie) {
-                        throw ie;
+                    } catch (IOException ioE) {
+                        throw ioE;
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
