@@ -19,4 +19,6 @@ public class ChunkDataPacket extends Packet {
     @Field( 4 )
     public byte[] data;
 
+    @Field(value = 5, type = Field.Type.VarInt)
+    public int numberOfEntitys;
 }

@@ -48,7 +48,7 @@ public class GoBrother extends Plugin {
 
         this.goBrotherServer = new Server(this, config.getPort());
         this.goBrotherServer.start();
-        
+
     }
 
     @Override
