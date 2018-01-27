@@ -18,6 +18,8 @@ import de.gobrother.network.packet.status.client.PingPacket;
 import de.gobrother.network.packet.status.client.RequestPacket;
 import de.gobrother.network.packet.status.server.PongPacket;
 import de.gobrother.network.packet.status.server.ResponsePacket;
+import de.gobrother.utils.TextFormat;
+import io.gomint.event.player.PlayerChatEvent;
 import lombok.Getter;
 import lombok.Setter;
 import org.json.JSONObject;
@@ -267,7 +269,7 @@ public class Server {
 
                         if(packet instanceof ChatPacket) {
                             de.gobrother.network.packet.play.server.ChatPacket chatPacket = new de.gobrother.network.packet.play.server.ChatPacket();
-                            chatPacket.message = "{\"text\":\"<" + username + "> " + ((ChatPacket) packet).message + "\"}";
+                            chatPacket.message = new TextFormat().toJson("<" + username + "> " + ((ChatPacket) packet).message);
                             chatPacket.position = 0;
 
                             output.writePacket(chatPacket, protocol);
