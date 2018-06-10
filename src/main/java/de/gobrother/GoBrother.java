@@ -4,6 +4,7 @@ import de.gobrother.config.Config;
 import de.gobrother.network.Server;
 import de.gobrother.player.JavaPlayer;
 import io.gomint.GoMint;
+import io.gomint.config.InvalidConfigurationException;
 import io.gomint.entity.EntityPlayer;
 import io.gomint.event.EventHandler;
 import io.gomint.event.EventListener;
@@ -40,9 +41,10 @@ public class GoBrother extends Plugin {
         File configFile = new File("plugins/GoBrother/config.cfg");
 
         this.config = new Config();
+
         try {
-            this.config.initialize(configFile);
-        } catch (IOException e) {
+            this.config.init( configFile );
+        } catch ( InvalidConfigurationException e ) {
             e.printStackTrace();
         }
 

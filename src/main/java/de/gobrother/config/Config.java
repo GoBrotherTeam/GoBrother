@@ -1,10 +1,10 @@
 package de.gobrother.config;
 
-import com.blackypaw.simpleconfig.SimpleConfig;
+import io.gomint.config.YamlConfig;
 import lombok.Getter;
 
 @Getter
-public class Config extends SimpleConfig {
+public class Config extends YamlConfig {
 
     private int port = 25565;
 
